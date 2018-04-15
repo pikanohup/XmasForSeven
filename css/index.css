@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+html, body, .board {
+  height: 100%;
+  width: 100%;
+}
+
+.board {
+  position: relative;
+  overflow: hidden;   
+}
+
+#starrysky {
+  position: absolute;
+  z-index: 0;
+}

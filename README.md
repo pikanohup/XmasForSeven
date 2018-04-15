@@ -1,4 +1,4 @@
-_Fireworks and Starry Sky_
+## Fireworks and Starry Sky
 
 A silly canvas animation experiment.
 
