@@ -4,17 +4,89 @@
   padding: 0;
 }
 
-html, body, .board {
+html, body, .sky, #stars, #fireworks {
   height: 100%;
   width: 100%;
 }
 
-.board {
+.sky {
   position: relative;
-  overflow: hidden;   
+  overflow: hidden;
+}
+#stars, #fireworks {
+  position: absolute;
+
+}
+#stars {
+  background-color: black;
+  z-index: 0;
+}
+#fireworks {
+  z-index: 1;
 }
 
-#starrysky {
+/*--------------------------- stars ---------------------------*/
+.blink {
+  opacity: 1;
   position: absolute;
-  z-index: 0;
+  pointer-events: none;
+}
+@keyframes blinking {
+  50% {
+    opacity: 0;
+  }
+}
+
+.fade {
+  background: #ffffff;
+  border-radius: 50%;
+  -webkit-animation: fading 2s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fading 2s;
+  /* Firefox < 16 */
+  -ms-animation: fading 2s;
+  /* Internet Explorer */
+  -o-animation: fading 2s;
+  /* Opera < 12.1 */
+  animation: fading 2s;
+}
+@keyframes fading {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fading {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fading {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-ms-keyframes fading {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-o-keyframes fading {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
