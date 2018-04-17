@@ -1,5 +1,5 @@
 /*!----------------------------------------------------------------------------
- * starry_sky
+ * stars - CSS3 animation
  * Licensed under the MIT License.
  * Copyright (C) 2018 Pikachu pocketfish@yeah.net
  * --------------------------------------------------------------------------*/
@@ -36,7 +36,7 @@ class StarrySky {
     let height = _this.container.offsetHeight
     for (let i = 0; i < this.num; i++) {
       setTimeout(function () {
-        let star = new Star(getRandomInt(0, width), getRandomInt(0, height), getRandomInt(1, 2), getRandomFloat(1, 5))
+        let star = new Star(getRandomInt(0, width), getRandomInt(0, height), getRandomInt(1, 2), getRandomFloat(3, 5))
         star.draw(_this.container)
       }, i * _this.diffusion)
     }

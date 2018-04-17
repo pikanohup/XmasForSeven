@@ -9,6 +9,10 @@ html, body, .sky, #stars, #fireworks {
   width: 100%;
 }
 
+.library {
+  display: none;
+}
+
 .sky {
   position: relative;
   overflow: hidden;
