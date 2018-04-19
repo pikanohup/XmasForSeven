@@ -31,14 +31,13 @@ class StarrySky {
     this.container = container
   }
   draw () {
-    let _this = this
-    let width = _this.container.offsetWidth
-    let height = _this.container.offsetHeight
+    let width = this.container.offsetWidth
+    let height = this.container.offsetHeight
     for (let i = 0; i < this.num; i++) {
-      setTimeout(function () {
+      setTimeout((() => {
         let star = new Star(getRandomInt(0, width), getRandomInt(0, height), getRandomInt(1, 2), getRandomFloat(3, 5))
-        star.draw(_this.container)
-      }, i * _this.diffusion)
+        star.draw(this.container)
+      }), i * this.diffusion)
     }
   }
 }
