@@ -19,17 +19,16 @@ html, body, .sky, #stars, #fireworks {
 }
 #stars, #fireworks {
   position: absolute;
-
 }
 #stars {
   background-color: black;
-  z-index: 70;
+  z-index: 0;
 }
 #fireworks {
-  z-index: 71;
+  z-index: 70;
 }
 #boom {
-  z-index: 72;
+  z-index: 77;
 }
 
 /*--------------------------- stars ---------------------------*/

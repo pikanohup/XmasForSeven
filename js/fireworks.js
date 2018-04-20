@@ -8,9 +8,10 @@ const glowBig = document.getElementById('glow-big')
 const radiusBig = 6
 const glowSmall = document.getElementById('glow-small')
 const radiusSmall = 3
+const gridSize = 12
  
 class Firework {
-  constructor (position, target, velocity, size, colour, gravityForced) {
+  constructor (position, target, velocity, colour, gravityForced) {
     this.alpha = 1
     this.easing = Math.random() * 0.02
     this.fade = Math.random() * 0.1
@@ -19,7 +20,7 @@ class Firework {
     this.lastPos = {x: position.x || 0, y: position.y || 0}
     this.target = {y: target.y || 0}
     this.velocity = {x: velocity.x || 0, y: velocity.y || 0}
-    this.grid = {x: colour % (size * 10), y: Math.floor(colour / (size * 10)) * size}
+    this.grid = {x: colour % (gridSize * 10), y: Math.floor(colour / (gridSize * 10)) * gridSize}
     this.colour = colour
     this.gravityForced = gravityForced || false
   }
@@ -59,7 +60,7 @@ class Firework {
           x: Math.cos(particleAngle) * randomVelocity,
           y: Math.sin(particleAngle) * randomVelocity
         },
-        this.colour, null, true)
+        this.colour, true)
     }
   }
   star (night) {
@@ -103,7 +104,7 @@ class Firework {
             x: Math.cos(subAngle) * randomVelocity,
             y: Math.sin(subAngle) * randomVelocity
           },
-          this.colour, null, true)
+          this.colour, true)
       }
     } while(end)
   }
@@ -125,20 +126,18 @@ class Firework {
 }
 
 class FireworkNight {
-  constructor (mainCanvas, boomCanvas, colourNum, gravity) {
+  constructor (mainCanvas, boomCanvas, gravity) {
     this.mainCanvas = mainCanvas
     this.mainContext = mainCanvas.getContext('2d')
     this.boomCanvas = boomCanvas
     this.boomContext = boomCanvas.getContext('2d')
     this.fireworks = []
-    this.colourNum = colourNum || 12
     this.gravity = gravity || 0.06
   }
-  createFirework (position, target, velocity, colour, size, gravityForced) {
+  createFirework (position, target, velocity, colour, gravityForced) {
     position = position || {}
     target = target || {}
     velocity = velocity || {}
-    size = size || this.colourNum
     this.fireworks.push(new Firework(
       {
         x: position.x || this.mainCanvas.width * 0.5,
@@ -151,21 +150,20 @@ class FireworkNight {
         x: velocity.x || Math.random() * 3 - 1.5,
         y: velocity.y || 0
       },
-      size,
-      colour || Math.floor(Math.random() * 100) * size,
+      colour || Math.floor(Math.random() * 100) * gridSize,
       gravityForced)
     )
   }
   setPalette () {
     this.boomContext.globalCompositeOperation = 'source-over'
-    this.boomCanvas.width = this.colourNum * 10
-    this.boomCanvas.height = this.colourNum * 10
+    this.boomCanvas.width = gridSize * 10
+    this.boomCanvas.height = gridSize * 10
     for (let i = 0; i < 100; i++) {
-      let colour = (i * this.colourNum),
-          gridX = colour % (this.colourNum * 10),
-          gridY = Math.floor(colour / (this.colourNum * 10)) * this.colourNum
+      let colour = (i * gridSize),
+          gridX = colour % (gridSize * 10),
+          gridY = Math.floor(colour / (gridSize * 10)) * gridSize
       this.boomContext.fillStyle = "hsl(" + Math.round(i * 3.6) + ",100%,60%)"
-      this.boomContext.fillRect(gridX, gridY, this.colourNum, this.colourNum)
+      this.boomContext.fillRect(gridX, gridY, gridSize, gridSize)
       this.boomContext.drawImage(glowBig, gridX, gridY)
     }
   }
