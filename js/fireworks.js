@@ -48,27 +48,44 @@ class Firework {
 
     context.restore()
   }
-  circle (night) {
+  update (gravity) {
+    this.lastPos.x = this.position.x
+    this.lastPos.y = this.position.y
+    if (this.gravityForced) {
+      this.velocity.y += gravity
+      this.position.y += this.velocity.y
+      this.alpha -= this.fade
+    } else {
+      let distance = (this.target.y - this.position.y)
+      this.position.y += distance * (0.03 + this.easing)
+      this.alpha = Math.min(distance * distance * 0.00005, 1)
+    }
+    this.position.x += this.velocity.x
+    return (this.alpha < 0.005)
+  }
+}
+
+class Explosion {
+  static circle (shot, night) {
     let count = 100, angle = (Math.PI * 2) / count
     while(count--) {
-      let randomVelocity = 4 + Math.random() * 4,
-          particleAngle = count * angle
+      let randomVel = 4 + Math.random() * 4
       night.createFirework(
-        this.position,
+        shot.position,
         null,
         {
-          x: Math.cos(particleAngle) * randomVelocity,
-          y: Math.sin(particleAngle) * randomVelocity
+          x: Math.cos(count * angle) * randomVel,
+          y: Math.sin(count * angle) * randomVel
         },
-        this.colour, true)
+        shot.colour, true)
     }
   }
-  star (night) {
+  static star (shot, night) {
     let points = 6 + Math.round(Math.random() * 15),
         jump = 3 + Math.round(Math.random() * 7),
         circle = Math.PI * 2,
         bias = Math.random() * Math.PI * 2,
-        randomVelocity  = -(Math.random() * 3 - 6),
+        randomVel  = -(Math.random() * 3 - 6),
         subDivisions = 10, radius = 80, start = 0, end = 0
         
     do {
@@ -78,12 +95,12 @@ class Firework {
       let sAngle = (start / points) * circle - bias,
           eAngle = ((start + jump) / points) * circle - bias,          
           startPos = {
-            x: this.position.x + Math.cos(sAngle) * radius,
-            y: this.position.y + Math.sin(sAngle) * radius
+            x: shot.position.x + Math.cos(sAngle) * radius,
+            y: shot.position.y + Math.sin(sAngle) * radius
           },
           endPos = {
-            x: this.position.x + Math.cos(eAngle) * radius,
-            y: this.position.y + Math.sin(eAngle) * radius
+            x: shot.position.x + Math.cos(eAngle) * radius,
+            y: shot.position.y + Math.sin(eAngle) * radius
           },
           diffPos = {
             x: endPos.x - startPos.x,
@@ -101,27 +118,12 @@ class Firework {
           },
           null,
           {
-            x: Math.cos(subAngle) * randomVelocity,
-            y: Math.sin(subAngle) * randomVelocity
+            x: Math.cos(subAngle) * randomVel,
+            y: Math.sin(subAngle) * randomVel
           },
-          this.colour, true)
+          shot.colour, true)
       }
     } while(end)
-  }
-  update (gravity) {
-    this.lastPos.x = this.position.x
-    this.lastPos.y = this.position.y
-    if (this.gravityForced) {
-      this.velocity.y += gravity
-      this.position.y += this.velocity.y
-      this.alpha -= this.fade
-    } else {
-      let distance = (this.target.y - this.position.y)
-      this.position.y += distance * (0.03 + this.easing)
-      this.alpha = Math.min(distance * distance * 0.00005, 1)
-    }
-    this.position.x += this.velocity.x
-    return (this.alpha < 0.005)
   }
 }
 
@@ -175,9 +177,9 @@ class FireworkNight {
         this.fireworks.splice(n, 1)
         if (!firework.gravityForced) {
           if (Math.random() < 0.7) {
-            firework.star(this)
+            Explosion.star(firework, this)
           } else {
-            firework.circle(this)
+            Explosion.circle(firework, this)
           }
         }
       }
