@@ -34,7 +34,7 @@ class Firework {
     context.globalCompositeOperation = 'lighter'
     context.globalAlpha = Math.random() * this.alpha
 
-    context.fillStyle = "rgba(255,255,255,0.3)"
+    context.fillStyle = 'rgba(255, 255, 255, 0.3)'
     context.beginPath()
     context.moveTo(this.position.x, this.position.y)
     context.lineTo(this.position.x + 1.5, this.position.y)
@@ -66,21 +66,43 @@ class Firework {
 }
 
 class Explosion {
-  static circle (shot, night) {
+  static createFirework (box, position, target, velocity, colour, gravityForced) {
+    position = position || {}
+    target = target || {}
+    velocity = velocity || {}
+    box.push(new Firework(
+      {
+        x: position.x,
+        y: position.y
+      },
+      {
+        y: target.y || 150 + Math.random() * 100
+      },
+      {
+        x: velocity.x || Math.random() * 3 - 1.5,
+        y: velocity.y || 0
+      },
+      colour || Math.floor(Math.random() * 100) * gridSize,
+      gravityForced)
+    )
+  }
+  static circle (shot, box) {
     let count = 100, angle = (Math.PI * 2) / count
     while(count--) {
       let randomVel = 4 + Math.random() * 4
-      night.createFirework(
+      Explosion.createFirework(
+        box,
         shot.position,
         null,
         {
           x: Math.cos(count * angle) * randomVel,
           y: Math.sin(count * angle) * randomVel
         },
-        shot.colour, true)
+        shot.colour,
+        true)
     }
   }
-  static star (shot, night) {
+  static star (shot, box) {
     let points = 6 + Math.round(Math.random() * 15),
         jump = 3 + Math.round(Math.random() * 7),
         circle = Math.PI * 2,
@@ -111,7 +133,8 @@ class Explosion {
       for(let i = 0; i < subDivisions; i++) {
         let sub = i / subDivisions,
             subAngle = sAngle + (sub * diffPos.a)
-        night.createFirework(
+        Explosion.createFirework(
+          box,
           {
             x: startPos.x + (sub * diffPos.x),
             y: startPos.y + (sub * diffPos.y)
@@ -121,7 +144,8 @@ class Explosion {
             x: Math.cos(subAngle) * randomVel,
             y: Math.sin(subAngle) * randomVel
           },
-          shot.colour, true)
+          shot.colour, 
+          true)
       }
     } while(end)
   }
@@ -136,26 +160,6 @@ class FireworkNight {
     this.fireworks = []
     this.gravity = gravity || 0.06
   }
-  createFirework (position, target, velocity, colour, gravityForced) {
-    position = position || {}
-    target = target || {}
-    velocity = velocity || {}
-    this.fireworks.push(new Firework(
-      {
-        x: position.x || this.mainCanvas.width * 0.5,
-        y: position.y || this.mainCanvas.height + 10
-      },
-      {
-        y: target.y || 150 + Math.random() * 100
-      },
-      {
-        x: velocity.x || Math.random() * 3 - 1.5,
-        y: velocity.y || 0
-      },
-      colour || Math.floor(Math.random() * 100) * gridSize,
-      gravityForced)
-    )
-  }
   setPalette () {
     this.boomContext.globalCompositeOperation = 'source-over'
     this.boomCanvas.width = gridSize * 10
@@ -164,7 +168,7 @@ class FireworkNight {
       let colour = (i * gridSize),
           gridX = colour % (gridSize * 10),
           gridY = Math.floor(colour / (gridSize * 10)) * gridSize
-      this.boomContext.fillStyle = "hsl(" + Math.round(i * 3.6) + ",100%,60%)"
+      this.boomContext.fillStyle = 'hsl(' + Math.round(i * 3.6) + ', 100%, 60%)'
       this.boomContext.fillRect(gridX, gridY, gridSize, gridSize)
       this.boomContext.drawImage(glowBig, gridX, gridY)
     }
@@ -177,9 +181,9 @@ class FireworkNight {
         this.fireworks.splice(n, 1)
         if (!firework.gravityForced) {
           if (Math.random() < 0.7) {
-            Explosion.star(firework, this)
+            Explosion.star(firework, this.fireworks)
           } else {
-            Explosion.circle(firework, this)
+            Explosion.circle(firework, this.fireworks)
           }
         }
       }
@@ -192,7 +196,8 @@ class FireworkNight {
     this.draw()
   }
   bind () {
-    this.mainCanvas.onclick = (() => this.createFirework(
+    this.mainCanvas.onclick = (() => Explosion.createFirework(
+      this.fireworks,
       {
         x: event.clientX, 
         y: this.mainCanvas.height + 10

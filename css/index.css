@@ -9,7 +9,7 @@ html, body, .sky, #stars, #fireworks {
   width: 100%;
 }
 
-.library {
+.library, #boom {
   display: none;
 }
 
@@ -22,16 +22,16 @@ html, body, .sky, #stars, #fireworks {
 }
 #stars {
   background-color: black;
-  z-index: 0;
-}
-#fireworks {
-  z-index: 70;
-}
-#boom {
-  z-index: 77;
 }
 
-/*--------------------------- stars ---------------------------*/
+canvas {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
 .blink {
   opacity: 1;
   position: absolute;
