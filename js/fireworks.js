@@ -32,7 +32,7 @@ class Firework {
 
     context.save()
     context.globalCompositeOperation = 'lighter'
-    context.globalAlpha = Math.random() * this.alpha
+    context.globalAlpha = this.alpha // * Math.random()
 
     context.fillStyle = 'rgba(255, 255, 255, 0.3)'
     context.beginPath()
@@ -88,15 +88,15 @@ class Explosion {
   }
   static circle (shot, box) {
     let count = 100, angle = (Math.PI * 2) / count
-    while(count--) {
+    for (let i = 0; i < count; i++) {
       let randomVel = 4 + Math.random() * 4
       Explosion.createFirework(
         box,
         shot.position,
         null,
         {
-          x: Math.cos(count * angle) * randomVel,
-          y: Math.sin(count * angle) * randomVel
+          x: Math.cos(i * angle) * randomVel,
+          y: Math.sin(i * angle) * randomVel
         },
         shot.colour,
         true)
@@ -168,7 +168,7 @@ class FireworkNight {
       let colour = (i * gridSize),
           gridX = colour % (gridSize * 10),
           gridY = Math.floor(colour / (gridSize * 10)) * gridSize
-      this.boomContext.fillStyle = 'hsl(' + Math.round(i * 3.6) + ', 100%, 60%)'
+      this.boomContext.fillStyle = 'hsl(' + Math.round(i * 3.6) + ', 100%, 40%)'
       this.boomContext.fillRect(gridX, gridY, gridSize, gridSize)
       this.boomContext.drawImage(glowBig, gridX, gridY)
     }
@@ -180,7 +180,7 @@ class FireworkNight {
       if (firework.update(this.gravity)) {
         this.fireworks.splice(n, 1)
         if (!firework.gravityForced) {
-          if (Math.random() < 0.7) {
+          if (Math.random() < 0.6) {
             Explosion.star(firework, this.fireworks)
           } else {
             Explosion.circle(firework, this.fireworks)
