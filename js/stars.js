@@ -4,6 +4,10 @@
  * Copyright (C) 2018 Pikachu pocketfish@yeah.net
  * --------------------------------------------------------------------------*/
 
+const getRandomFloat = (min, max) => Math.random() * (max - min) + min
+
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min) 
+ 
 class Star {
   constructor (x, y, scale, blinkTime) {
     this.x = x

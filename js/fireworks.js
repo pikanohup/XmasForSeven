@@ -192,7 +192,7 @@ class FireworkNight {
   }
   update () {
     this.mainContext.clearRect(0, 0, this.mainCanvas.width, this.mainCanvas.height)
-    requestAnimFrame(() => this.update()) // magic!! >< 
+    requestAnimationFrame(() => this.update()) // magic!! >< 
     this.draw()
   }
   bind () {
