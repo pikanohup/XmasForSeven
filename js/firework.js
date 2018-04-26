@@ -1,21 +1,9 @@
 /* ----------------------------------------------------------------------------
- * fireworks - canvas animation
+ * firework
  * Licensed under the MIT License.
  * Copyright (C) 2018 Pikachu pocketfish@yeah.net
  * -------------------------------------------------------------------------- */
 
-// image parameters
-// someone told me that hiding library elements in the DOM is fun... @God Seven do you think so? >.O
-const glowBig = document.getElementById('glow-big')
-const radiusBig = 6
-const glowSmall = document.getElementById('glow-small')
-const radiusSmall = 3
-const kitty = document.getElementById('kitty')
-const kittySize = 165
-
-// other const parameters
-const gridSize = 12
-const gravity = 0.06
 
 /* -------------- firework singleton -------------- */
 class Firework {
@@ -184,70 +172,5 @@ class Explosion {
           true)
       }
     } while(end)
-  }
-}
-
-/* -------------- canvas manager -------------- */
-class FireworkNight {
-  constructor (mainCanvas, boomCanvas) {
-    this.mainCanvas = mainCanvas
-    this.mainContext = mainCanvas.getContext('2d')
-    this.boomCanvas = boomCanvas
-    this.boomContext = boomCanvas.getContext('2d')
-    this.fireworks = []
-  }
-  setPalette () {
-    this.boomContext.globalCompositeOperation = 'source-over'
-    this.boomCanvas.width = gridSize * 10
-    this.boomCanvas.height = gridSize * 10
-    for (let i = 0; i < 100; i++) {
-      let colour = (i * gridSize),
-          gridX = colour % (gridSize * 10),
-          gridY = Math.floor(colour / (gridSize * 10)) * gridSize
-      this.boomContext.fillStyle = 'hsl(' + Math.round(i * 3.6) + ', 100%, 40%)'
-      this.boomContext.fillRect(gridX, gridY, gridSize, gridSize)
-      this.boomContext.drawImage(glowBig, gridX, gridY)
-    }
-  }
-  draw () {
-    let n = this.fireworks.length
-    while(n--) {
-      let firework = this.fireworks[n]
-      if (firework.update()) {
-        this.fireworks.splice(n, 1)
-        if (!firework.gravityForced) {
-          if (Math.random() < 0.6) {
-            Explosion.star(firework, this.fireworks)
-          } else {
-            Explosion.circle(firework, this.fireworks)
-          }
-        }
-      }
-      firework.render(this.mainContext, this.boomCanvas)
-    }
-  }
-  update () {
-    this.mainContext.clearRect(0, 0, this.mainCanvas.width, this.mainCanvas.height)
-    requestAnimationFrame(() => this.update()) // magic!! >< 
-    this.draw()
-  }
-  bind () {
-    this.mainCanvas.onclick = (() => Explosion.createFirework(
-      this.fireworks,
-      {
-        x: event.clientX, 
-        y: this.mainCanvas.height + 10
-      },
-      {
-        y: event.clientY
-      })
-    )
-  }
-  fireUp () {
-    this.mainCanvas.width = document.getElementsByClassName('sky')[0].getBoundingClientRect().width
-		this.mainCanvas.height = document.getElementsByClassName('sky')[0].getBoundingClientRect().height
-    this.setPalette()
-    this.bind()
-    this.update()
   }
 }

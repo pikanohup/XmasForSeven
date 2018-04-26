@@ -1,11 +1,8 @@
 setUp = () => {
   loadAll()
   
-  let starry_sky = new StarrySky(77, 20, document.getElementById('stars'))
-  starry_sky.draw()
-
-  let firework_night = new FireworkNight(document.getElementById('fireworks'), document.getElementById('boom'))
-  firework_night.fireUp()
+  let manager = new Manager(document.getElementById('fireworks'), document.getElementById('boom'))
+  manager.fireUp()
 }
 
 // I know this function seems stupid but...I trid all methods I could find on the Internet...none of them worked T-T
