@@ -1,15 +1,23 @@
-/*!----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * fireworks - canvas animation
  * Licensed under the MIT License.
  * Copyright (C) 2018 Pikachu pocketfish@yeah.net
- * --------------------------------------------------------------------------*/
- 
+ * -------------------------------------------------------------------------- */
+
+// image parameters
+// someone told me that hiding library elements in the DOM is fun... @God Seven do you think so? >.O
 const glowBig = document.getElementById('glow-big')
 const radiusBig = 6
 const glowSmall = document.getElementById('glow-small')
 const radiusSmall = 3
+const kitty = document.getElementById('kitty')
+const kittySize = 165
+
+// other const parameters
 const gridSize = 12
- 
+const gravity = 0.06
+
+/* -------------- firework singleton -------------- */
 class Firework {
   constructor (position, target, velocity, colour, gravityForced) {
     this.alpha = 1
@@ -43,12 +51,12 @@ class Firework {
     context.closePath()
     context.fill()
 
-    context.drawImage(boom, this.grid.x, this.grid.y, radiusBig * 2, radiusBig * 2, x - radiusBig, y - radiusBig, radiusBig * 2, radiusBig * 2)
+    context.drawImage(boom, this.grid.x, this.grid.y, gridSize, gridSize, x - radiusBig, y - radiusBig, gridSize, gridSize)
     context.drawImage(glowSmall, x - radiusSmall, y - radiusSmall)
 
     context.restore()
   }
-  update (gravity) {
+  update () {
     this.lastPos.x = this.position.x
     this.lastPos.y = this.position.y
     if (this.gravityForced) {
@@ -65,6 +73,34 @@ class Firework {
   }
 }
 
+/* -------------- image to particles -------------- */
+class Shape {
+  constructor (source, width, height, colNum, rowNum) {
+    this.source = source
+    this.width = width || 0
+    this.height = height || 0
+    this.colNum = colNum || 100
+    this.rowNum = rowNum || 100
+    this.particles = []
+  }
+  incise (context) {
+    context.drawImage(this.source, 0, 0)
+    let raw = context.getImageData(0, 0, this.width, this.height).data
+    context.clearRect(0, 0, this.width, this.height)
+    
+    let gridWidth = this.width / this.colNum,
+        gridHeight = this.height / this.rowNum
+    for (let i = 0; i < this.width; i+=gridWidth) {
+      for (let j = 0; j < this.height; j+=gridHeight) {
+        if (raw[j * this.width + i]) {
+          this.particles.push({x: i, y: j})
+        }
+      }
+    }
+  }
+}
+
+/* -------------- explosion methods -------------- */
 class Explosion {
   static createFirework (box, position, target, velocity, colour, gravityForced) {
     position = position || {}
@@ -151,14 +187,14 @@ class Explosion {
   }
 }
 
+/* -------------- canvas manager -------------- */
 class FireworkNight {
-  constructor (mainCanvas, boomCanvas, gravity) {
+  constructor (mainCanvas, boomCanvas) {
     this.mainCanvas = mainCanvas
     this.mainContext = mainCanvas.getContext('2d')
     this.boomCanvas = boomCanvas
     this.boomContext = boomCanvas.getContext('2d')
     this.fireworks = []
-    this.gravity = gravity || 0.06
   }
   setPalette () {
     this.boomContext.globalCompositeOperation = 'source-over'
@@ -177,7 +213,7 @@ class FireworkNight {
     let n = this.fireworks.length
     while(n--) {
       let firework = this.fireworks[n]
-      if (firework.update(this.gravity)) {
+      if (firework.update()) {
         this.fireworks.splice(n, 1)
         if (!firework.gravityForced) {
           if (Math.random() < 0.6) {

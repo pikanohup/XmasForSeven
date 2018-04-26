@@ -1,13 +1,14 @@
-/*!----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * stars - CSS3 animation
  * Licensed under the MIT License.
  * Copyright (C) 2018 Pikachu pocketfish@yeah.net
- * --------------------------------------------------------------------------*/
+ * -------------------------------------------------------------------------- */
 
+// common functions
 const getRandomFloat = (min, max) => Math.random() * (max - min) + min
-
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min) 
- 
+
+/* -------------- star singleton -------------- */ 
 class Star {
   constructor (x, y, scale, blinkTime) {
     this.x = x
@@ -28,6 +29,7 @@ class Star {
   }
 }
 
+/* -------------- star generator -------------- */
 class StarrySky {
   constructor (num, diffusion, container) {
     this.num = num
