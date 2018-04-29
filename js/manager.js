@@ -1,71 +1,84 @@
 /* ----------------------------------------------------------------------------
  * canvas manager
  * Licensed under the MIT License.
- * Copyright (C) 2018 Pikachu pocketfish@yeah.net
+ * Copyright (C) 2018 Pikachu hooraypikachu@gmail.com
  * -------------------------------------------------------------------------- */
- 
+
 class Manager {
-  constructor (mainCanvas, boomCanvas) {
+  constructor (mainCanvas) {
     this.mainCanvas = mainCanvas
     this.mainContext = mainCanvas.getContext('2d')
-    this.boomCanvas = boomCanvas
-    this.boomContext = boomCanvas.getContext('2d')
+    this.boomCanvas = document.createElement('canvas')
+    this.kittyTemplate = []
     this.stars = []
     this.fireworks = []
+    this.particles = []
   }
-  setStars (num, diffusion) {
-    for (let i = 0; i < num; i++) {
+  setUp () {
+    this.mainCanvas.width = document.getElementsByClassName('sky')[0].getBoundingClientRect().width
+		this.mainCanvas.height = document.getElementsByClassName('sky')[0].getBoundingClientRect().height
+
+    // set stars
+    let starNum = 77, diffusion = 77
+    for (let i = 0; i < starNum; i++) {
       setTimeout((() => {
         this.stars.push(new Star(
-          Math.random() * this.mainCanvas.width, Math.random() * this.mainCanvas.height, 
+          Math.floor(Math.random() * this.mainCanvas.width), Math.floor(Math.random() * this.mainCanvas.height),
           Math.random() * 0.5 + 0.5, Math.random() * 2 + 3 ))
       }), i * diffusion)
     }
+
+    Firework.setPalette(this.boomCanvas)
+
+    this.kittyTemplate = Particle.incise(kittyIcon, kittySize, kittySize, 77, 77, this.mainContext)
+    console.log(this.kittyTemplate)
   }
-  setPalette () {
-    this.boomContext.globalCompositeOperation = 'source-over'
-    this.boomCanvas.width = gridSize * 10
-    this.boomCanvas.height = gridSize * 10
-    for (let i = 0; i < 100; i++) {
-      let colour = (i * gridSize),
-          gridX = colour % (gridSize * 10),
-          gridY = Math.floor(colour / (gridSize * 10)) * gridSize
-      this.boomContext.fillStyle = 'hsl(' + Math.round(i * 3.6) + ', 100%, 40%)'
-      this.boomContext.fillRect(gridX, gridY, gridSize, gridSize)
-      this.boomContext.drawImage(glowBig, gridX, gridY)
+  explode (firework) {
+    let flag = Math.random() * 10
+    if (flag < 5) {
+      Explosion.star(firework, this.fireworks)
+    } else if (flag < 8) {
+      Explosion.circle(firework, this.fireworks)
+    } else {
+      Explosion.shape(firework, this.kittyTemplate, this.particles)
     }
   }
   draw () {
     this.stars.forEach(star => {
       star.draw(this.mainContext)
     })
-    
-    let n = this.fireworks.length
-    while(n--) {
-      let firework = this.fireworks[n]
+
+    let nf = this.fireworks.length
+    while (nf--) {
+      let firework = this.fireworks[nf]
       if (firework.update()) {
-        this.fireworks.splice(n, 1)
+        this.fireworks.splice(nf, 1)
         if (!firework.gravityForced) {
-          if (Math.random() < 0.6) {
-            Explosion.star(firework, this.fireworks)
-          } else {
-            Explosion.circle(firework, this.fireworks)
-          }
-        }
+          this.explode(firework)
+       }
       }
-      firework.render(this.mainContext, this.boomCanvas)
+      firework.draw(this.mainContext, this.boomCanvas)
+    }
+
+    let np = this.particles.length
+    while (np--) {
+      let particle = this.particles[np]
+      if (particle.update()) {
+        this.particles.splice(np, 1)
+      }
+      particle.draw(this.mainContext)
     }
   }
   update () {
     this.mainContext.clearRect(0, 0, this.mainCanvas.width, this.mainCanvas.height)
-    requestAnimationFrame(() => this.update()) // magic!! >< 
+    requestAnimationFrame(() => this.update()) // magic!! ><
     this.draw()
   }
   bind () {
     this.mainCanvas.onclick = (() => Explosion.createFirework(
       this.fireworks,
       {
-        x: event.clientX, 
+        x: event.clientX,
         y: this.mainCanvas.height + 10
       },
       {
@@ -73,11 +86,8 @@ class Manager {
       })
     )
   }
-  fireUp () {
-    this.mainCanvas.width = document.getElementsByClassName('sky')[0].getBoundingClientRect().width
-		this.mainCanvas.height = document.getElementsByClassName('sky')[0].getBoundingClientRect().height
-    this.setStars(77, 77)
-    this.setPalette()
+  fire () {
+    this.setUp()
     this.bind()
     this.update()
   }

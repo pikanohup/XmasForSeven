@@ -17,15 +17,23 @@
     </div>
     
     <div class="sky">
-      <div id="stars"></div>
 	    <canvas id="fireworks"></canvas>
-      <canvas id="boom"></canvas>
 	  </div>
     
 	  <script type="text/javascript" src="js/common.js"></script>
     <script type="text/javascript" src="js/star.js"></script>
     <script type="text/javascript" src="js/firework.js"></script>
+    <script type="text/javascript" src="js/particle.js"></script>
+    <script type="text/javascript" src="js/explosion.js"></script>
     <script type="text/javascript" src="js/manager.js"></script>
-	  <script type="text/javascript" src="js/index.js"></script>
+	  <script type="text/javascript">
+      let imgs = document.getElementsByTagName('img')
+      for (let img of imgs) {
+        if(!img.complete)
+          window.location.reload()
+      }
+      let manager = new Manager(document.getElementById('fireworks'))
+      manager.fire()
+    </script>
   </body>
 </html>

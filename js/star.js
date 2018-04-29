@@ -1,16 +1,15 @@
 /* ----------------------------------------------------------------------------
  * star singleton
  * Licensed under the MIT License.
- * Copyright (C) 2018 Pikachu pocketfish@yeah.net
+ * Copyright (C) 2018 Pikachu hooraypikachu@gmail.com
  * -------------------------------------------------------------------------- */
 
-/* -------------- star singleton -------------- */ 
 class Star {
   constructor (x, y, scale, blinkTime) {
     this.x = x
     this.y = y
     this.scale = scale
-    this.blink = blinkTime * 0.0007
+    this.blink = blinkTime * 0.001
     this.alpha = 0
   }
   draw (context) {   
