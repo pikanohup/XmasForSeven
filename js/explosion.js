@@ -26,7 +26,7 @@ class Explosion {
     )
   }
   static circle (shot, box) {
-    let count = 77, angle = (Math.PI * 2) / count
+    let count = 50, angle = (Math.PI * 2) / count
     for (let i = 0; i < count; i++) {
       let randomVel = 4 + Math.random() * 4
       Explosion.createFirework(
@@ -89,7 +89,7 @@ class Explosion {
     } while(end)
   }
   static shape(shot, template, box) {
-    let interval = 3, totalTime = 500,
+    let interval = 2, totalTime = 500,
         duration = Math.ceil((totalTime - 10 * interval) / 16.66),
         colour = Math.round(shot.colour / gridSize * 3.6)
     template.forEach(pixel => {

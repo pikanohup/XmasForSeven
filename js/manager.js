@@ -18,26 +18,24 @@ class Manager {
     this.mainCanvas.width = document.getElementsByClassName('sky')[0].getBoundingClientRect().width
 		this.mainCanvas.height = document.getElementsByClassName('sky')[0].getBoundingClientRect().height
 
-    // set stars
     let starNum = 77, diffusion = 77
     for (let i = 0; i < starNum; i++) {
       setTimeout((() => {
         this.stars.push(new Star(
           Math.floor(Math.random() * this.mainCanvas.width), Math.floor(Math.random() * this.mainCanvas.height),
-          Math.random() * 0.5 + 0.5, Math.random() * 2 + 3 ))
+          Math.random() + 0.5, Math.random() * 2 + 3 ))
       }), i * diffusion)
     }
 
     Firework.setPalette(this.boomCanvas)
 
-    this.kittyTemplate = Particle.incise(kittyIcon, kittySize, kittySize, 77, 77, this.mainContext)
-    console.log(this.kittyTemplate)
+    this.kittyTemplate = Particle.incise(kittyIcon, kittySize, kittySize, 30, 30, this.mainContext)
   }
   explode (firework) {
     let flag = Math.random() * 10
-    if (flag < 5) {
+    if (flag < 4) {
       Explosion.star(firework, this.fireworks)
-    } else if (flag < 8) {
+    } else if (flag < 7) {
       Explosion.circle(firework, this.fireworks)
     } else {
       Explosion.shape(firework, this.kittyTemplate, this.particles)

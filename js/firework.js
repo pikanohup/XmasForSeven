@@ -25,7 +25,7 @@ class Firework {
 
     context.save()
     context.globalCompositeOperation = 'lighter'
-    context.globalAlpha = this.alpha // * Math.random()
+    context.globalAlpha = this.alpha
 
     context.fillStyle = 'rgba(255, 255, 255, 0.3)'
     context.beginPath()
@@ -61,7 +61,7 @@ class Firework {
     canvas.height = gridSize * 10
 
     let context = canvas.getContext('2d')
-    context.globalCompositeOperation = 'source-over'
+    context.globalCompositeOperation = 'xor'
     for (let i = 0; i < 100; i++) {
       let colour = (i * gridSize),
           gridX = colour % (gridSize * 10),

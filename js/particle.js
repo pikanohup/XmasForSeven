@@ -13,15 +13,25 @@ class Particle {
     this.duration = duration
     this.colour = colour
     this.count = 0
-    this.alpha = 0.7
+    this.alpha = 1
   }
   draw (context) {
-    context.save()
-
-    context.globalAlpha = this.alpha
-    context.fillStyle = 'hsl(' + this.colour + ', 100%, 40%)'
-    context.fillRect(this.position.x, this.position.y, 1, 1)
-
+    let x = Math.round(this.position.x),
+        y = Math.round(this.position.y)
+        
+    context.save()       
+    context.shadowColor = 'hsla(' + this.colour + ', 100%, 60%,' + (1 - this.alpha) + ')'
+    context.shadowBlur = 10
+   
+    context.fillStyle = 'hsla(' + this.colour + ', 100%, 40%,' + this.alpha + ')'
+    context.beginPath()
+    context.arc(x, y, 1, 0, Math.PI * 2)
+    context.closePath()
+    context.fill()
+    
+    context.fillStyle = 'rgba(255, 255, 255, ' + Math.min(this.alpha, 0.7) + ')'
+    context.fillRect(x, y, 1, 1)
+    
     context.restore()
   }
   update() {
@@ -31,10 +41,10 @@ class Particle {
         this.position.y = easeInOutQuad(this.count - this.interval, this.start.y, this.target.y - this.start.y, this.duration)
       }
     } else {
-      this.alpha -= 0.007
+      this.alpha -= 0.03
     }
     this.count += Math.random() + 0.5
-    return (this.alpha < 0.007)
+    return (this.alpha < 0.05)
   }
   static incise (source, width, height, colNum, rowNum, context) {
     context.drawImage(source, 0, 0)
