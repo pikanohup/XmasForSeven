@@ -4,7 +4,7 @@
   padding: 0;
 }
 
-html, body, .sky, #fireworks {
+html, body, .sky{
   height: 100%;
   width: 100%;
 }
@@ -14,15 +14,11 @@ html, body, .sky, #fireworks {
 }
 
 .sky {
-  position: relative;
   overflow: hidden;
   background: -webkit-linear-gradient(rgba(35,39,68,1) 77%, rgba(34,20,46,0.9) 100%);
   background: -o-linear-gradient(rgba(35,39,68,1) 77%, rgba(34,20,46,0.9) 100%);
   background: -moz-linear-gradient(rgba(35,39,68,1) 77%, rgba(34,20,46,0.9) 100%));
   background: linear-gradient(rgba(35,39,68,1) 77%, rgba(34,20,46,0.9) 100%);
-}
-#fireworks {
-  position: absolute;
 }
 
 canvas {
@@ -31,4 +27,25 @@ canvas {
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
   transform: translateZ(0);
+}
+
+.info {
+  position: relative;
+  text-align: center;
+  bottom: 2em;
+}
+
+.info span {
+  margin-right: 0.8em;
+}
+
+.info img {
+  height: 0.8em;
+  width: 0.8em;
+}
+
+.info a {
+  color: rgba(234,236,239,0.1);
+  font-family: FontAwesome;
+  font-size: 0.6em;
 }
