@@ -18,20 +18,12 @@ class Particle {
   draw (context) {
     let x = Math.round(this.position.x),
         y = Math.round(this.position.y)
-        
-    context.save()       
-    context.shadowColor = 'hsla(' + this.colour + ', 100%, 60%,' + (1 - this.alpha) + ')'
-    context.shadowBlur = 10
-   
+
+    context.save()
+
     context.fillStyle = 'hsla(' + this.colour + ', 100%, 40%,' + this.alpha + ')'
-    context.beginPath()
-    context.arc(x, y, 1, 0, Math.PI * 2)
-    context.closePath()
-    context.fill()
-    
-    context.fillStyle = 'rgba(255, 255, 255, ' + Math.min(this.alpha, 0.7) + ')'
     context.fillRect(x, y, 1, 1)
-    
+
     context.restore()
   }
   update() {

@@ -36,16 +36,16 @@ canvas {
 }
 
 .info span {
-  margin-right: 0.8em;
+  margin-right: 1rem;
 }
 
 .info img {
-  height: 0.8em;
-  width: 0.8em;
+  height: 1.2rem;
+  width: 1.2rem;
 }
 
 .info a {
-  color: rgba(234,236,239,0.1);
+  color: rgba(255,255,255,0.1);
   font-family: FontAwesome;
-  font-size: 0.6em;
+  font-size: 1rem;
 }
