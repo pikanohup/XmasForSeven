@@ -29,13 +29,13 @@ class Manager {
 
     Firework.setPalette(this.boomCanvas)
 
-    this.kittyTemplate = Particle.incise(kittyIcon, kittySize, kittySize, 50, 50, this.mainContext)
+    this.kittyTemplate = Particle.incise(kittyIcon, kittySize, kittySize, 30, 30, this.mainContext)
   }
   explode (firework) {
     let flag = Math.random() * 10
     if (flag < 4) {
       Explosion.star(firework, this.fireworks)
-    } else if (flag < 7) {
+    } else if (flag < 8) {
       Explosion.circle(firework, this.fireworks)
     } else {
       Explosion.shape(firework, this.kittyTemplate, this.particles)

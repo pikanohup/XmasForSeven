@@ -8,6 +8,7 @@ class Particle {
   constructor (start, target, interval, duration, colour) {
     this.start = {x: start.x || 0, y: start.y || 0}
     this.position = {x: start.x || 0, y: start.y || 0}
+    this.lastPos = {x: start.x || 0, y: start.y || 0}
     this.target = {x: target.x || 0, y: target.y || 0}
     this.interval = interval * 10 * Math.random()
     this.duration = duration
@@ -16,19 +17,40 @@ class Particle {
     this.alpha = 1
   }
   draw (context) {
+    // let x = Math.round(this.position.x),
+        // y = Math.round(this.position.y)
+
+    // context.save()
+
+    // context.fillStyle = 'hsla(' + this.colour + ', 100%, 40%,' + this.alpha + ')'
+    // context.fillRect(x, y, 1, 1)
+
+    // context.restore()
     let x = Math.round(this.position.x),
-        y = Math.round(this.position.y)
+        y = Math.round(this.position.y),
+        xVel = (x - this.lastPos.x) * -5,
+        yVel = (y - this.lastPos.y) * -5
 
     context.save()
 
-    context.fillStyle = 'hsla(' + this.colour + ', 100%, 40%,' + this.alpha + ')'
-    context.fillRect(x, y, 1, 1)
+    context.shadowColor = 'hsla(' + this.colour + ', 100%, 80%,' + (1-this.alpha) + ')'
+    context.shadowBlur = 5
+    context.fillStyle = 'hsla(' + this.colour + ', 100%, 60%,' + Math.min(this.alpha, 0.3) + ')'
+    context.beginPath()
+    context.moveTo(this.position.x, this.position.y)
+    context.lineTo(this.position.x + 2, this.position.y)
+    context.lineTo(this.position.x + xVel, this.position.y + yVel)
+    context.lineTo(this.position.x - 2, this.position.y)
+    context.closePath()
+    context.fill()
 
     context.restore()
   }
   update() {
     if (this.count < this.interval + this.duration) {
       if (this.count >= this.interval) {
+        this.lastPos.x = this.position.x
+        this.lastPos.y = this.position.y
         this.position.x = easeInOutQuad(this.count - this.interval, this.start.x, this.target.x - this.start.x, this.duration)
         this.position.y = easeInOutQuad(this.count - this.interval, this.start.y, this.target.y - this.start.y, this.duration)
       }

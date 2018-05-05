@@ -26,7 +26,7 @@ class Explosion {
     )
   }
   static circle (shot, box) {
-    let count = 40, angle = (Math.PI * 2) / count
+    let count = 50, angle = (Math.PI * 2) / count
     for (let i = 0; i < count; i++) {
       let randomVel = 4 + Math.random() * 4
       Explosion.createFirework(
@@ -42,12 +42,12 @@ class Explosion {
     }
   }
   static star (shot, box) {
-    let points = 4 + Math.round(Math.random() * 6),
+    let points = 4 + Math.round(Math.random() * 7),
         jump = 2 + Math.round(Math.random() * 3),
         circle = Math.PI * 2,
         bias = Math.random() * Math.PI * 2,
         randomVel  = -(Math.random() * 3 - 6),
-        subDivisions = 6, radius = 80, start = 0, end = 0
+        subDivisions = 8, radius = 80, start = 0, end = 0
 
     do {
       start = end
