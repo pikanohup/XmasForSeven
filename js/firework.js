@@ -29,10 +29,10 @@ class Firework {
 
     context.fillStyle = 'rgba(255, 255, 255, 0.3)'
     context.beginPath()
-    context.moveTo(this.position.x, this.position.y)
-    context.lineTo(this.position.x + 2, this.position.y)
-    context.lineTo(this.position.x + xVel, this.position.y + yVel)
-    context.lineTo(this.position.x - 2, this.position.y)
+    context.moveTo(x, y)
+    context.lineTo(x + 2, y)
+    context.lineTo(x + xVel, y + yVel)
+    context.lineTo(x - 2, y)
     context.closePath()
     context.fill()
 

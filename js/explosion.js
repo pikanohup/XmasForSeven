@@ -94,7 +94,10 @@ class Explosion {
         colour = Math.round(shot.colour / gridSize * 3.6)
     template.forEach(pixel => {
       box.push(new Particle(
-        shot.position,
+        {
+          x: shot.position.x,
+          y: shot.position.y
+        },
         {
           x: pixel.x + shot.position.x,
           y: pixel.y + shot.position.y

@@ -9,6 +9,7 @@ class Manager {
     this.mainCanvas = mainCanvas
     this.mainContext = mainCanvas.getContext('2d')
     this.boomCanvas = document.createElement('canvas')
+    this.spotCanvas = document.createElement('canvas')
     this.kittyTemplate = []
     this.stars = []
     this.fireworks = []
@@ -18,12 +19,13 @@ class Manager {
     this.mainCanvas.width = document.getElementsByClassName('sky')[0].getBoundingClientRect().width
 		this.mainCanvas.height = document.getElementsByClassName('sky')[0].getBoundingClientRect().height
 
-    let starNum = 77, diffusion = 77
+    Star.setSpot(this.spotCanvas)
+    let starNum = 77, diffusion = 66
     for (let i = 0; i < starNum; i++) {
       setTimeout((() => {
         this.stars.push(new Star(
           Math.floor(Math.random() * this.mainCanvas.width), Math.floor(Math.random() * this.mainCanvas.height),
-          Math.random() + 0.5, Math.random() * 2 + 3 ))
+          Math.random() * 0.5, Math.random() * 2 + 3 ))
       }), i * diffusion)
     }
 
@@ -43,7 +45,7 @@ class Manager {
   }
   draw () {
     this.stars.forEach(star => {
-      star.draw(this.mainContext)
+      star.draw(this.mainContext, this.spotCanvas)
     })
 
     let nf = this.fireworks.length

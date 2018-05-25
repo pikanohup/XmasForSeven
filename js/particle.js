@@ -17,15 +17,6 @@ class Particle {
     this.alpha = 1
   }
   draw (context) {
-    // let x = Math.round(this.position.x),
-        // y = Math.round(this.position.y)
-
-    // context.save()
-
-    // context.fillStyle = 'hsla(' + this.colour + ', 100%, 40%,' + this.alpha + ')'
-    // context.fillRect(x, y, 1, 1)
-
-    // context.restore()
     let x = Math.round(this.position.x),
         y = Math.round(this.position.y),
         xVel = (x - this.lastPos.x) * -5,
@@ -33,14 +24,17 @@ class Particle {
 
     context.save()
 
-    context.shadowColor = 'hsla(' + this.colour + ', 100%, 80%,' + (1-this.alpha) + ')'
-    context.shadowBlur = 5
-    context.fillStyle = 'hsla(' + this.colour + ', 100%, 60%,' + Math.min(this.alpha, 0.3) + ')'
+    let gradient = context.createLinearGradient(x, y, x + xVel, y + yVel);    
+    gradient.addColorStop(0, 'hsl(' + this.colour + ', 100%, 40%)')
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0.3)')
+    context.fillStyle = gradient
+    context.globalAlpha = this.alpha
+    
     context.beginPath()
-    context.moveTo(this.position.x, this.position.y)
-    context.lineTo(this.position.x + 2, this.position.y)
-    context.lineTo(this.position.x + xVel, this.position.y + yVel)
-    context.lineTo(this.position.x - 2, this.position.y)
+    context.moveTo(x, y)
+    context.lineTo(x + 2, y)
+    context.lineTo(x + xVel, y + yVel)
+    context.lineTo(x + xVel - 2, y + yVel)
     context.closePath()
     context.fill()
 
@@ -55,7 +49,7 @@ class Particle {
         this.position.y = easeInOutQuad(this.count - this.interval, this.start.y, this.target.y - this.start.y, this.duration)
       }
     } else {
-      this.alpha -= 0.03
+      this.alpha -= 0.03 
     }
     this.count += Math.random() + 0.5
     return (this.alpha < 0.05)
